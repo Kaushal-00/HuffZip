@@ -29,9 +29,20 @@ public class Main {
         FrequencyMap frequencyMapObj = new FrequencyMap();
         HashMap<Character, Integer> frequencyMap = frequencyMapObj.generateFrequencyMap(filePath);
 
-        System.out.println("Character Frequencies:");
-        System.out.println(frequencyMap);
+        // System.out.println("Character Frequencies:");
+        // System.out.println(frequencyMap);
 
         sc.close();
+
+
+
+        HuffmanTree huffmanTree = new HuffmanTree();
+        HuffmanNode root = huffmanTree.generateHuffmanTree(frequencyMap);
+
+        HuffmanCode huffmanCode = new HuffmanCode();
+        HashMap<Character, String> huffmanCodeMap = huffmanCode.generateHuffmanCode(root);
+
+        HuffmanEncoder huffmanEncoder = new HuffmanEncoder();
+        String encodedText = huffmanEncoder.encodeText(filePath, huffmanCodeMap);
     }
 }
