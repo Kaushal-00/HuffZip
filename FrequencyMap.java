@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public class FrequencyMap {
 
-    public HashMap<Character, Integer> frequencyMapGenerator(String filePath) {
+    public HashMap<Character, Integer> generateFrequencyMap(String filePath) {
         HashMap<Character, Integer> frequencyMap = new HashMap<>();
         FileReader fr = null;
 

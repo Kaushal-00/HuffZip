@@ -27,7 +27,7 @@ public class Main {
         }
 
         FrequencyMap frequencyMapObj = new FrequencyMap();
-        HashMap<Character, Integer> frequencyMap = frequencyMapObj.frequencyMapGenerator(filePath);
+        HashMap<Character, Integer> frequencyMap = frequencyMapObj.generateFrequencyMap(filePath);
 
         System.out.println("Character Frequencies:");
         System.out.println(frequencyMap);
