@@ -26,15 +26,10 @@ public class Main {
             return;
         }
 
-        FrequencyMap frequencyMapObj = new FrequencyMap();
-        HashMap<Character, Integer> frequencyMap = frequencyMapObj.generateFrequencyMap(filePath);
-
-        // System.out.println("Character Frequencies:");
-        // System.out.println(frequencyMap);
-
         sc.close();
 
-
+        FrequencyMap frequencyMapObj = new FrequencyMap();
+        HashMap<Character, Integer> frequencyMap = frequencyMapObj.generateFrequencyMap(filePath);
 
         HuffmanTree huffmanTree = new HuffmanTree();
         HuffmanNode root = huffmanTree.generateHuffmanTree(frequencyMap);
@@ -43,6 +38,9 @@ public class Main {
         HashMap<Character, String> huffmanCodeMap = huffmanCode.generateHuffmanCode(root);
 
         HuffmanEncoder huffmanEncoder = new HuffmanEncoder();
-        String encodedText = huffmanEncoder.encodeText(filePath, huffmanCodeMap);
+        String encodedText = huffmanEncoder.generateEncodedText(filePath, huffmanCodeMap);
+
+        huffmanEncoder.generateCompressedFile(encodedText);
+        
     }
 }
