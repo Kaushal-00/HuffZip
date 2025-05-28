@@ -5,44 +5,40 @@ import java.util.HashMap;
 
 public class HuffmanEncoder {
 
-    String generateEncodedText(String filePath, HashMap<Character, String> huffmanCodeMap) {
-        StringBuffer encodedText = new StringBuffer();
+    void generateCompressedFile(String filePath, HashMap<Character, String> huffmanCodeMap) {
+        try {
+            FileReader fr = new FileReader(filePath);
+            FileOutputStream fos = new FileOutputStream("Encoded.bin");
 
-        try (FileReader fr = new FileReader(filePath)) {
             int c;
+            byte b = 0;
+            int bitCounter = 0;
+
             while ((c = fr.read()) != -1) {
                 char ch = (char) c;
                 String code = huffmanCodeMap.get(ch);
-                encodedText.append(code);
-            }
-        } catch (IOException e) {
-            System.out.println("Error reading file for encoding: " + e.getMessage());
-        }
 
-        return encodedText.toString();
-    }
-
-    void generateCompressedFile(String encodedText) {
-        try {
-            FileOutputStream fos = new FileOutputStream("Encoded.bin");
-            int i = 0;
-
-            while (i < encodedText.length()) {
-                byte b = 0;
-
-                for (int j = 0; j < 8; j++) {
+                for (int i = 0; i < code.length(); i++) {
                     b = (byte) (b << 1);
-
-                    if (i < encodedText.length() && encodedText.charAt(i) == '1') {
+                    if (code.charAt(i) == '1') {
                         b = (byte) (b | 1);
                     }
+                    bitCounter++;
 
-                    i++;
+                    if (bitCounter == 8) {
+                        fos.write(b);
+                        b = 0;
+                        bitCounter = 0;
+                    }
                 }
+            }
 
+            if (bitCounter > 0) {
+                b = (byte) (b << (8 - bitCounter));
                 fos.write(b);
             }
 
+            fr.close();
             fos.close();
             System.out.println("Encoded binary file written successfully as Encoded.bin");
 

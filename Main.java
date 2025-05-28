@@ -38,9 +38,7 @@ public class Main {
         HashMap<Character, String> huffmanCodeMap = huffmanCode.generateHuffmanCode(root);
 
         HuffmanEncoder huffmanEncoder = new HuffmanEncoder();
-        String encodedText = huffmanEncoder.generateEncodedText(filePath, huffmanCodeMap);
+        huffmanEncoder.generateCompressedFile(filePath, huffmanCodeMap);
 
-        huffmanEncoder.generateCompressedFile(encodedText);
-        
     }
 }
