@@ -41,5 +41,7 @@ public class Main {
         HuffmanEncoder huffmanEncoder = new HuffmanEncoder();
         huffmanEncoder.generateCompressedFile(filePath, huffmanCodeMap, huffmanTreeCode);
 
+        HuffmanDecoder decoder = new HuffmanDecoder();
+        decoder.decodeFile();
     }
 }
