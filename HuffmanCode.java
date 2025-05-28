@@ -2,15 +2,16 @@ import java.util.HashMap;
 
 public class HuffmanCode {
 
-    HashMap<Character, String> generateHuffmanCode(HuffmanNode root) {
+    HashMap<Character, String> generateHuffmanCodeMap(HuffmanNode root) {
 
         HashMap<Character, String> huffmanCodeMap = new HashMap<>();
-        generateCode(root, "", huffmanCodeMap);
+        generateHuffmanCode(root, "", huffmanCodeMap);
 
         return huffmanCodeMap;
     }
 
-    void generateCode(HuffmanNode node, String code, HashMap<Character, String> huffmanCodeMap) {
+    void generateHuffmanCode(HuffmanNode node, String code, HashMap<Character, String> huffmanCodeMap) {
+        
         if (node == null) {
             return;
         }
@@ -20,7 +21,36 @@ public class HuffmanCode {
             return;
         }
 
-        generateCode(node.left, code + "0", huffmanCodeMap);
-        generateCode(node.right, code + "1", huffmanCodeMap);
+        generateHuffmanCode(node.left, code + "0", huffmanCodeMap);
+        generateHuffmanCode(node.right, code + "1", huffmanCodeMap);
+    }
+
+    StringBuffer generateHuffmanTreeCode (HuffmanNode root) {
+
+        StringBuffer huffmanTreeCode = new StringBuffer();
+
+        generateTreeCode(root, huffmanTreeCode);
+
+        return huffmanTreeCode;
+    }
+
+    void generateTreeCode(HuffmanNode root, StringBuffer huffmanTreeCode) {
+
+        if (root == null) {
+            return;
+        }
+
+        if(root.left == null && root.right == null) {
+
+            huffmanTreeCode.append('1');
+            huffmanTreeCode.append(root.ch);
+
+        } else {
+
+            huffmanTreeCode.append('0');
+            generateTreeCode(root.left, huffmanTreeCode);
+            generateTreeCode(root.right, huffmanTreeCode);
+
+        }
     }
 }

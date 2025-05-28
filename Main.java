@@ -35,10 +35,11 @@ public class Main {
         HuffmanNode root = huffmanTree.generateHuffmanTree(frequencyMap);
 
         HuffmanCode huffmanCode = new HuffmanCode();
-        HashMap<Character, String> huffmanCodeMap = huffmanCode.generateHuffmanCode(root);
+        HashMap<Character, String> huffmanCodeMap = huffmanCode.generateHuffmanCodeMap(root);
+        StringBuffer huffmanTreeCode = huffmanCode.generateHuffmanTreeCode(root);
 
         HuffmanEncoder huffmanEncoder = new HuffmanEncoder();
-        huffmanEncoder.generateCompressedFile(filePath, huffmanCodeMap);
+        huffmanEncoder.generateCompressedFile(filePath, huffmanCodeMap, huffmanTreeCode);
 
     }
 }
