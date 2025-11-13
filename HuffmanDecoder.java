@@ -5,7 +5,6 @@ import java.io.IOException;
 public class HuffmanDecoder {
 
     static class DecodedNode {
-
         char ch;
         DecodedNode left, right;
 
@@ -22,31 +21,25 @@ public class HuffmanDecoder {
         }
     }
 
-    int currentByte = 0;
-    int bitPosition = 8;
-    FileInputStream fis;
+    private int currentByte = 0;
+    private int bitPosition = 8;
+    private FileInputStream fis;
 
-    int readBit() throws IOException {
-
+    private int readBit() throws IOException {
         if (bitPosition == 8) {
             currentByte = fis.read();
             bitPosition = 0;
         }
-
         if (currentByte == -1) {
             return -1;
         }
-
         int bit = (currentByte >> (7 - bitPosition)) & 1;
         bitPosition++;
-
         return bit;
     }
 
-    char readCharacter() throws IOException {
-
+    private char readCharacter() throws IOException {
         int asciiValue = 0;
-
         for (int i = 0; i < 8; i++) {
             int bit = readBit();
             if (bit == -1) {
@@ -54,45 +47,32 @@ public class HuffmanDecoder {
             }
             asciiValue = (asciiValue << 1) | bit;
         }
-
         return (char) asciiValue;
     }
 
-    DecodedNode rebuildTree() throws IOException {
-
+    private DecodedNode rebuildTree() throws IOException {
         int bit = readBit();
-
-        if (bit == -1) {
-            return null;
-        }
+        if (bit == -1) return null;
 
         if (bit == 1) {
-
             char character = readCharacter();
             return new DecodedNode(character);
-
         } else {
-
             DecodedNode node = new DecodedNode();
             node.left = rebuildTree();
             node.right = rebuildTree();
-
             return node;
         }
     }
 
-    void decodeData(DecodedNode root, FileOutputStream fos) throws IOException {
-
+    private void decodeData(DecodedNode root, FileOutputStream fos) throws IOException {
         DecodedNode current = root;
         int bit;
-
         while ((bit = readBit()) != -1) {
-            if (bit == 0) {
-                current = current.left;
-            } else {
-                current = current.right;
+            current = (bit == 0) ? current.left : current.right;
+            if (current == null) {
+                throw new IOException("Invalid bitstream: corrupted data detected.");
             }
-
             if (current.isLeaf()) {
                 fos.write(current.ch);
                 current = root;
@@ -100,22 +80,23 @@ public class HuffmanDecoder {
         }
     }
 
-    void decodeFile() {
+    public boolean decodeFile(String compressedFilePath, String outputFilePath) {
+        try (FileInputStream in = new FileInputStream(compressedFilePath);
+             FileOutputStream fos = new FileOutputStream(outputFilePath)) {
 
-        try {
-            fis = new FileInputStream("Encoded.bin");
-            FileOutputStream fos = new FileOutputStream("Decoded.txt");
+            this.fis = in;
+            this.currentByte = 0;
+            this.bitPosition = 8;
 
             DecodedNode root = rebuildTree();
+            if (root == null) {
+                throw new IOException("Failed to rebuild Huffman tree.");
+            }
             decodeData(root, fos);
-
-            fis.close();
-            fos.close();
-
-            System.out.println("Decoded file saved successfully as Decoded.txt");
-
+            return true;
         } catch (IOException e) {
-            System.out.println("Error during decoding: " + e.getMessage());
+            System.out.println("Error: Decoding failed - " + e.getMessage());
+            return false;
         }
     }
 }
